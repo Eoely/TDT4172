@@ -17,6 +17,7 @@ class LinearRegression():
         return 0.5 * np.mean((y-y_pred)**2)
 
     def compute_gradients(self, x, y, y_pred):
+        # We arrived to this through derivating something
         grad_w = 2 * np.matmul(x.transpose(), (y_pred - y)) / x.shape[0]
         grad_b = 2 * np.mean(y_pred - y)
         return grad_w, grad_b
@@ -35,6 +36,8 @@ class LinearRegression():
             y (array<m>): a vector of floats
         """
         # x.shape = antall datapunkter, antall features
+
+        # The input is pandas df, reshape it to numpy
         X = np.asarray(X).reshape(-1, 1)
         y = np.asarray(y).reshape(-1)
 
@@ -42,14 +45,13 @@ class LinearRegression():
 
         print(self.weights)
         self.bias = 0
-        # Epochs: Antall ganger treningsdataene sendes gjennom læringsalgoritmen. Nok en hyperparameter.
         for _ in range(self.epochs):
             y_pred = self.predict(X)
 
             grad_w, grad_b = self.compute_gradients(X, y, y_pred)
 
             self.update_parameters(grad_w, grad_b)
-            loss = self._compute_loss(y, y_pred)
+            loss = self._compute_loss(y, y_pred) # TODO: Do something with the loss
 
     def predict(self, X):
         """
