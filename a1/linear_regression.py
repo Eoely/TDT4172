@@ -9,8 +9,11 @@ class LinearRegression():
         self.train_accuracies = []
         self.losses = []
         self.learning_rate = 0.001  # Dummy value
-        self.epochs = 100
+        self.epochs = 5000
         pass
+
+    def get_params(self):
+        return self.weights, self.bias
 
     def _compute_loss(self, y, y_pred):
         # This is the formula for Mean square error (MSE)
@@ -18,8 +21,9 @@ class LinearRegression():
 
     def compute_gradients(self, x, y, y_pred):
         # We arrived to this through derivating something
-        grad_w = 2 * np.matmul(x.transpose(), (y_pred - y)) / x.shape[0]
-        grad_b = 2 * np.mean(y_pred - y)
+        loss = y_pred - y
+        grad_w = 2 * np.matmul(x.transpose(), loss) / x.shape[0]
+        grad_b = 2 * np.mean(loss)
         return grad_w, grad_b
 
     def update_parameters(self, grad_w, grad_b):
@@ -40,18 +44,13 @@ class LinearRegression():
         # The input is pandas df, reshape it to numpy
         X = np.asarray(X).reshape(-1, 1)
         y = np.asarray(y).reshape(-1)
-
         self.weights = np.zeros(1)
 
-        print(self.weights)
         self.bias = 0
         for _ in range(self.epochs):
             y_pred = self.predict(X)
-
             grad_w, grad_b = self.compute_gradients(X, y, y_pred)
-
             self.update_parameters(grad_w, grad_b)
-            loss = self._compute_loss(y, y_pred) # TODO: Do something with the loss
 
     def predict(self, X):
         """
@@ -67,4 +66,5 @@ class LinearRegression():
             A length m array of floats
         """
         X = np.asarray(X).reshape(-1, 1)
-        return np.matmul(self.weights, X.transpose()) + self.bias
+        res = np.matmul(self.weights, X.transpose()) + self.bias
+        return res
