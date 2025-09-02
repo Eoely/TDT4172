@@ -15,10 +15,6 @@ class LinearRegression():
     def get_params(self):
         return self.weights, self.bias
 
-    def _compute_loss(self, y, y_pred):
-        # This is the formula for Mean square error (MSE)
-        return 0.5 * np.mean((y-y_pred)**2)
-
     def compute_gradients(self, x, y, y_pred):
         # We arrived to this through derivating something
         loss = y_pred - y
@@ -66,5 +62,4 @@ class LinearRegression():
             A length m array of floats
         """
         X = np.asarray(X).reshape(-1, 1)
-        res = np.matmul(self.weights, X.transpose()) + self.bias
-        return res
+        return np.matmul(self.weights, X.transpose()) + self.bias

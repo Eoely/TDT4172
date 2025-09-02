@@ -1,0 +1,57 @@
+import numpy as np
+import math as math
+import pandas as pd
+
+
+class LogisticRegression:
+    def __init__(self, learning_rate: float = 0.1, epochs: int = 1000):
+        # Sett før. Hyperparameter som styrer skritt-lengden
+        self.learning_rate = learning_rate
+        # Antall ganger treningsdataene sendes gjennom læringsalgoritmen. Nok en hyperparameter.
+        self.epochs = epochs
+        self.weights, self.bias = None, None
+        self.losses, self.train_accuracies = [], []
+
+    def _sigmoid(self, x: np.ndarray) -> np.ndarray:
+        return 1/(1 + np.e**-x)
+
+    def compute_gradients(self, x: np.ndarray, y: np.ndarray, y_pred: np.ndarray):
+        loss = y - y_pred
+        grad_w = np.mean(np.matmul(loss, x))
+        grad_b = np.mean(loss)
+        return grad_w, grad_b
+
+    def update_parameters(self, grad_w: float, grad_b: float) -> None:
+        self.weights = self.weights - self.learning_rate * grad_w
+        self.bias = self.bias - self.learning_rate * grad_b
+
+    def accuracy(self, true_values: np.ndarray, predictions: np.ndarray) -> float:
+        return float(np.mean(true_values == predictions))
+
+    def fit(self, df_x: pd.Series, df_y: pd.Series):
+        # x.shape = [#datapunkter, #features] -> weights er en vektor med size = antall features
+        self.bias = 0
+        x = np.asarray(df_x)
+        y = np.asarray(df_y).reshape(-1, 1)
+        self.weights = np.zeros(x.shape[1])
+        self.weights = self.weights
+        # Gradient Descent
+        for _ in range(self.epochs):
+            lin_model = np.dot(x, self.weights) + self.bias
+            y_pred = self._sigmoid(lin_model)
+            grad_w, grad_b = self.compute_gradients(x, y, y_pred)
+            self.update_parameters(grad_w, grad_b)
+
+    def predict(self, df_x):
+        x = np.asarray(df_x)
+
+        lin_model = np.dot(x, self.weights) + self.bias
+        # lin_model = np.matmul(x, self.weights.transpose()) + self.bias
+        y_pred = self._sigmoid(lin_model)
+        return [1 if _y > 0.5 else 0 for _y in y_pred]
+
+
+if __name__ == '__main__':
+    lr = LogisticRegression()
+    for i in range(100):
+        print(i, lr._sigmoid(i))
