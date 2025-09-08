@@ -5,9 +5,7 @@ import pandas as pd
 
 class LogisticRegression:
     def __init__(self, learning_rate: float = 0.1, epochs: int = 1500):
-        # Sett før. Hyperparameter som styrer skritt-lengden
         self.learning_rate = learning_rate
-        # Antall ganger treningsdataene sendes gjennom læringsalgoritmen. Nok en hyperparameter.
         self.epochs = epochs
         self.weights, self.bias = None, None
         self.losses, self.train_accuracies = [], []
@@ -24,9 +22,6 @@ class LogisticRegression:
 
     def compute_gradients(self, x: np.ndarray, y: np.ndarray, y_pred: np.ndarray):
         loss = y_pred - y
-        # grad_w = np.mean(np.matmul(loss, x))
-        # grad_b = np.mean(loss)
-
         grad_w = 2 * np.matmul(x.transpose(), loss) / x.shape[0]
         grad_b = 2 * np.mean(loss)
         return grad_w, grad_b
@@ -39,7 +34,6 @@ class LogisticRegression:
         return np.mean(true_values == predictions)
 
     def fit(self, df_x: pd.Series, df_y: pd.Series):
-        # x.shape = [#datapunkter, #features] -> weights er en vektor med size = antall features
         self.bias = 0
         x = np.asarray(df_x)
         y = np.asarray(df_y).reshape(-1,)
@@ -61,7 +55,6 @@ class LogisticRegression:
         x = np.asarray(df_x)
 
         lin_model = np.matmul(x, self.weights) + self.bias
-        # lin_model = np.matmul(x, self.weights.transpose()) + self.bias
         y_pred = self._sigmoid(lin_model)
         return [1 if _y > 0.5 else 0 for _y in y_pred]
 
