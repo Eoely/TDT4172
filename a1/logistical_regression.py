@@ -13,6 +13,13 @@ class LogisticRegression:
     def accuracy(self, y, y_pred):
         return np.mean(y == y_pred)
 
+    def predict_proba(self, df_x):
+        x = np.asarray(df_x)
+        print("shape", x.shape, self.weights.shape)
+        lin_model = np.matmul(x, self.weights) + self.bias
+        y_pred = self._sigmoid(lin_model)
+        return y_pred
+
     def _sigmoid(self, x: np.ndarray) -> np.ndarray:
         return 1/(1 + np.e**-x)
 
