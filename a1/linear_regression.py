@@ -8,7 +8,7 @@ class LinearRegression():
         self.bias = None
         self.train_accuracies = []
         self.losses = []
-        self.learning_rate = 0.001  # Dummy value
+        self.learning_rate = 0.001
         self.epochs = 5000
         pass
 
@@ -16,7 +16,7 @@ class LinearRegression():
         return self.weights, self.bias
 
     def compute_gradients(self, x, y, y_pred):
-        # We arrived to this through derivating something
+        # We arrived to this through derivation
         loss = y_pred - y
         grad_w = 2 * np.matmul(x.transpose(), loss) / x.shape[0]
         grad_b = 2 * np.mean(loss)
@@ -35,7 +35,6 @@ class LinearRegression():
                 m rows (#samples) and n columns (#features)
             y (array<m>): a vector of floats
         """
-        # x.shape = antall datapunkter, antall features
 
         # The input is pandas df, reshape it to numpy
         X = np.asarray(X).reshape(-1, 1)
